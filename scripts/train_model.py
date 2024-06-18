@@ -1,6 +1,7 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import StratifiedKFold, train_test_split, GridSearchCV
@@ -42,7 +43,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Define a single pipeline with a placeholder for the classifier
 pipeline = Pipeline([
-    ('vectorizer', CountVectorizer()),  # You can choose the best vectorizer based on previous tests
+    ('vectorizer', TfidfVectorizer()),  
     ('classifier', LogisticRegression())
 ])
 
@@ -61,6 +62,12 @@ param_grid = [
         'classifier': [RandomForestClassifier()],
         'classifier__n_estimators': [10, 50, 100],
         'classifier__max_features': ['auto', 'sqrt', 'log2']
+    }, 
+        {
+        'classifier': [GradientBoostingClassifier()],
+        'classifier__n_estimators': [100, 200],
+        'classifier__learning_rate': [0.01, 0.1],
+        'classifier__max_depth': [3, 5]
     }
 ]
 
